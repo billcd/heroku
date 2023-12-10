@@ -1,7 +1,6 @@
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import certifi
-import os
 import base64
 import tempfile
 
@@ -12,9 +11,8 @@ def setup_temp_x509_from_base64(base64_encoded_string):
     # Writing the certificate to a temporary file
     with tempfile.NamedTemporaryFile(delete=False) as cert_file:
         cert_file.write(cert_content)
-        cert_path = cert_file.name
+        return cert_file.name
 
-    return cert_path
 
 class MongoDatabaseDriver:
 
@@ -25,9 +23,7 @@ class MongoDatabaseDriver:
         self.client = None
         self.db = None
 
-
     def connect(self):
-
         self.client = MongoClient(self.connection_string,
                                   tls=True,
                                   tlsCertificateKeyFile=self.mongodb_cert,
@@ -38,7 +34,6 @@ class MongoDatabaseDriver:
     def close(self):
         if self.client is not None:
             self.client.close()
-
 
     def get_vehicles(self):
         vehicles = []
