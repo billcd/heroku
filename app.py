@@ -1,11 +1,13 @@
 from flask import Flask, render_template
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def hello_world():  # put application's code here
-    body = "This is running from a template!"
+    body = os.environ.get('BODY')
     return render_template('default.html', body=body)
 
 
